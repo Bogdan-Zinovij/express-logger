@@ -35,6 +35,8 @@ app.get('/throw-error', (req, res, next) => {
   }
 });
 
+app.use(errorHandler);
+
 const metricsApp = setupMetricsApp();
 
 app.listen(PORT, HOST, () => {
@@ -46,5 +48,3 @@ metricsApp.listen(METRICS_PORT, () => {
     `Metrics server listening on http://localhost:${METRICS_PORT}/metrics`
   );
 });
-
-app.use(errorHandler);
