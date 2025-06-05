@@ -35,6 +35,17 @@ app.get('/throw-error', (req, res, next) => {
   }
 });
 
+app.get('/not-found', (req, res, next) => {
+  try {
+    const err = new Error('Not found error');
+    err.status = 404;
+
+    throw err;
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(errorHandler);
 
 const metricsApp = setupMetricsApp();
