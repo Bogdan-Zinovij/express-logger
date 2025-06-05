@@ -1,37 +1,39 @@
-const axios = require("axios");
+const axios = require('axios');
+const { metrics } = require('../metrics/prometheus');
 
 class FluentLogger {
   constructor() {
-    this.url = "http://localhost:8080";
+    this.url = 'http://localhost:8080';
   }
 
   async log(level, message, meta = {}) {
+    metrics.loggerEventsTotal.inc({ level });
     try {
       await axios.post(this.url, {
         level,
         message,
         ...meta,
         timestamp: new Date().toISOString(),
-        app: "efk-express-lab",
+        app: 'efk-express-lab',
       });
     } catch (error) {
-      console.error("Fluentd log failed:", error.message);
+      console.error('Fluentd log failed:', error.message);
     }
   }
 
   info(msg, meta) {
     console.log(msg);
-    this.log("info", msg, meta);
+    this.log('info', msg, meta);
   }
 
   debug(msg, meta) {
     console.debug(msg);
-    this.log("debug", msg, meta);
+    this.log('debug', msg, meta);
   }
 
   error(msg, meta) {
     console.error(msg);
-    this.log("error", msg, meta);
+    this.log('error', msg, meta);
   }
 }
 
